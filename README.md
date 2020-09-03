@@ -14,7 +14,7 @@ I want to generate a webpage that displays my team's basic info
 so that I have quick access to emails and GitHub profiles
 ```
 ### See a demo of my Template Engine Employee Summary at any of the following video links:
-* [Vimeo Link](https://vimeo.com/user122135446/review/454214713/5f7d8cfd78) – choose highest quality setting
+* [Vimeo Link](https://vimeo.com/454214713) – choose highest quality setting
 * [Link to Video on Github](https://github.com/jennifoo/10-template-engine-employee-summary/blob/master/)
 
 ### Guidelines:
