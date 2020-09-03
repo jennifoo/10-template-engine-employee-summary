@@ -1,14 +1,17 @@
 {
   "name": "10-template-engine-employee-summary",
   "version": "1.0.0",
-  "description": "OOP and testing for week 10 homework",
+  "description": "Object oriented programming and testing for week 10 homework. Run 'node app.js' to run the program.",
   "main": "app.js",
   "directories": {
     "lib": "lib",
-    "test": "npm run test"
+    "node_modules" : "node_modules",
+    "output" : "output",
+    "templates" : "templates",
+    "test" : "test"
   },
   "scripts": {
-    "test": "jest --verbose test/*"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
