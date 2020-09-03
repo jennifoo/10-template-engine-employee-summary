@@ -13,96 +13,143 @@ const render = require("./lib/htmlRenderer");
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 
-inquirer.prompt([
-  {
-    type: "list",
-    message: "What is your job title?",
-    name: "jobtitle",
-    choices: [
-      "Manager",
-      "Engineer",
-      "Intern",
-    ]
-  },
-  {
-    type: "input",
-    name: "name",
-    message: "What is your name?"
-  },
-  {
-    type: "input",
-    name: "email",
-    message: "What is your email?"
-  },
-  {
-    type: "input", // MANAGER
-    name: "officenumber",
-    message: "What is your office number?",
-    when: (answers) => answers.jobtitle === "Manager"
-  },
-  {
-    type: "input", //ENGINEER
-    name: "github",
-    message: "What is your GitHub username?",
-    when: (answers) => answers.jobtitle === "Engineer"
-  },
-  {
-    type: "input", //INTERN
-    name: "school",
-    message: "What school are you currently attending?",
-    when: (answers) => answers.jobtitle === "Intern"
-  }
-]).then(function(data){
-
 const employeeArray = [];
 
-if (data.jobtitle === "Manager"){
-    const inputManager = ({jobtitle, name, email, officenumber}) => {
-          const employee = new Manager(jobtitle, name, email, officenumber);
-          employeeArray.push(employee);
-          //console.log(employeeArray);
+addManager();
+
+function addManager() {
+  inquirer
+    .prompt([
+    {
+      type: "input",
+      name: "managerName",
+      message: "Hi manager, what is your name?"
+    },
+    {
+      type: "input",
+      name: "managerID",
+      message: "What is your ID?"
+    },
+    {
+      type: "input",
+      name: "managerEmail",
+      message: "What is your email?"
+    },
+    {
+      type: "input",
+      name: "managerNumber",
+      message: "What is your office number?"
     }
-    inputManager(data);
-} else if (data.jobtitle === "Engineer"){
-    const inputEngineer = ({jobtitle, name, email, github}) => {
-          const employee = new Engineer(jobtitle, name, email, github);
-          employeeArray.push(employee);
-          //console.log(employeeArray);
+  ]).then( data => {
+    const manager = new Manager(data.managerName, data.managerID, data.managerEmail, data.managerNumber);
+    employeeArray.push(manager);
+    createEngineer()
+  })
+};
+
+// QUESTIONS TO ADD ENGINEER OR INTERN
+
+function addEng() {
+  inquirer
+  .prompt([
+    {
+      type: "confirm",
+      name: "engineerChoice",
+      message: "Add another engineer?"
     }
-    inputEngineer(data);
-} else {
-    const inputIntern = ({jobtitle, name, email, school}) => {
-          const employee = new Intern(jobtitle, name, email, school);
-          employeeArray.push(employee);
-          //console.log(employeeArray);
+  ]).then( val => {
+    if(val.engineerChoice) {
+      createEngineer()
+    } else { createIntern() }
+  })
+};
+
+function addInt() {
+  inquirer
+  .prompt([
+    {
+      type: "confirm",
+      name: "internChoice",
+      message: "Add another intern?"
     }
-    inputIntern(data);
-}
+  ]).then( val => {
+    if(val.internChoice) {
+      createIntern()
+    } else { createDone(); }
+  })
+};
 
-render(employeeArray);
+// CREATE TEAM
 
-});
+function createEngineer() {
+  inquirer
+  .prompt([
+    {
+      type: "input",
+      name: "engineerName",
+      message: "What is your engineer's name?"
+    },
+    {
+      type: "input",
+      name: "engineerID",
+      message: "What is their ID?"
+    },
+    {
+      type: "input",
+      name: "engineerEmail",
+      message: "What is your engineer's email?"
+    },
+    {
+      type: "input",
+      name: "managerNumber",
+      message: "What is your engineer's GitHub username?"
+    }
+  ]).then( data => {
+    const engineer = new Engineer(data.engineerName, data.engineerID, data.engineerEmail, data.managerNumber);
+    employeeArray.push(engineer);
+    // ADD ANOTHER ENGINEER?
+    addEng();
+  })
+};
 
+function createIntern() {
+  inquirer
+  .prompt([
+    {
+      type: "input",
+      name: "internName",
+      message: "What is your intern's name?"
+    },
+    {
+      type: "input",
+      name: "internID",
+      message: "What is their ID?"
+    },
+    {
+      type: "input",
+      name: "internEmail",
+      message: "What is your intern's email?"
+    },
+    {
+      type: "input",
+      name: "internSchool",
+      message: "What school did your intern attend?"
+    }
+  ]).then( data => {
+    const intern = new Intern(data.internName, data.internID, data.internEmail, data.internSchool);
+    employeeArray.push(intern);
+    // ADD ANOTHER INTERN?
+    addInt()
+  })
+};
 
-// After the user has input all employees desired, call the `render` function (required
-// above) and pass in an array containing all employee objects; the `render` function will
-// generate and return a block of HTML including templated divs for each employee!
-
-
-// After you have your html, you're now ready to create an HTML file using the HTML
-// returned from the `render` function. Now write it to a file named `team.html` in the
-// `output` folder. You can use the variable `outputPath` above target this location.
-// Hint: you may need to check if the `output` folder exists and create it if it
-// does not.
-
-
-// HINT: each employee type (manager, engineer, or intern) has slightly different
-// information; write your code to ask different questions via inquirer depending on
-// employee type.
-
-
-// HINT: make sure to build out your classes first! Remember that your Manager, Engineer,
-// and Intern classes should all extend from a class named Employee; see the directions
-// for further information. Be sure to test out each class and verify it generates an
-// object with the correct structure and methods. This structure will be crucial in order
-// for the provided `render` function to work! ```
+function createDone() {
+  // console.log(employeeArray);
+  const output = render(employeeArray);
+  fs.writeFile("./output/team.html", output, function(err) {
+    if (err) {
+      return console.log(err);
+    }
+    console.log("The team page has been successfully generated in output folder!")
+  })
+};
