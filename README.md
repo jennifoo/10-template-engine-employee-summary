@@ -15,7 +15,7 @@ so that I have quick access to emails and GitHub profiles
 ```
 ### See a demo of my Template Engine Employee Summary at any of the following video links:
 * [Vimeo Link](https://vimeo.com/454214713) – choose highest quality setting
-* [Link to Video on Github](https://github.com/jennifoo/10-template-engine-employee-summary/blob/master/)
+* [Link to Video on Github](https://github.com/jennifoo/10-template-engine-employee-summary/blob/master/10-template-engine-employee-summary-video-sm.mov)
 
 ### Guidelines:
 
